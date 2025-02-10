@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/auth")
+@RequestMapping("api/auth") // todo Можно вынести в Endpoints
 @RequiredArgsConstructor
 public class AuthController {
 
@@ -21,7 +21,7 @@ public class AuthController {
         try {
             final JwtResponse token = authService.register(authRequest);
             return ResponseEntity.ok(token);
-        }catch (UserAlreadyExistException e){
+        }catch (UserAlreadyExistException e){ // todo Почему бы по аналогии с другими искл. не добавить обработку в GlobalExceptionHandler
             return ResponseEntity.status(409).build();
         }
     }

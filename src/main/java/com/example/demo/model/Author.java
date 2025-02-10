@@ -15,7 +15,7 @@ import java.util.List;
 @Entity
 @Table(name = "author")
 @NoArgsConstructor
-public class Author {
+public class Author { // todo Хорошо бы добавить валидацию полей, например, вряд ли нам подойдет имя null
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

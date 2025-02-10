@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class BookService {
 
     private final BookRepository bookRepository;
-    private final AuthorRepository authorRepository;
+    private final AuthorRepository authorRepository; // todo Не используется
 
     @Transactional
     public BookModel createBook(Book book) {

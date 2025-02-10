@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class AuthorService {
+public class AuthorService { // todo Этот и последующие сервисы лучше разделить на интерфейс и имплементацию (AuthorService и AuthorServiceImpl)
     private final AuthorRepository authorRepository;
 
     @Transactional
@@ -35,7 +35,7 @@ public class AuthorService {
 
     @Transactional
     public boolean deleteAuthor(Long id) {
-        Author author = authorRepository.findById(id).orElse(null);
+        Author author = authorRepository.findById(id).orElse(null); // todo Вот тут можно кинуть исключение
 
         if (author == null) {
             return false;

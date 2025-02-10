@@ -31,7 +31,7 @@ public class BookController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBook(@PathVariable Long id ){
-        if (bookService.deleteBook(id)) {
+        if (bookService.deleteBook(id)) { // todo тут лучше сделать через NoSuchBookException, чтобы соблюсти единообразие по аналогии с get и update методами
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();

@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Getter
 @Setter
-public class JwtAuthentication implements Authentication {
+public class JwtAuthentication implements Authentication { // todo Этот класс где-то используется?
 
     private boolean authenticated;
     private String username;

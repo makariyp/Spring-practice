@@ -25,7 +25,7 @@ public class AuthService {
     private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
 
-    public JwtResponse register(@NonNull JwtRequest authRequest) throws UserAlreadyExistException {
+    public JwtResponse register(@NonNull JwtRequest authRequest) throws UserAlreadyExistException { // todo throws излишне
 
         if (userService.getByUsername(authRequest.getUsername()).isPresent()) {
             throw new UserAlreadyExistException("User already exist");
@@ -55,9 +55,10 @@ public class AuthService {
         final UserEntity user = userService.getByUsername(authRequest.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        String hashedPassword = passwordEncoder.encode(authRequest.getPassword());
+        String hashedPassword = passwordEncoder.encode(authRequest.getPassword()); // каждый вызов encode(...) создаёт новый хэш (включая соль).
+        // То есть строка всегда будет отличаться от того, что хранится в базе, даже при одинаковом «сыром» пароле.
 
-        if (hashedPassword.equals(user.getPassword())) {
+        if (passwordEncoder.matches(authRequest.getPassword(), user.getPassword())) { // Правильный способ
             final String accessToken = jwtProvider.generateAccessToken(user);
 
             return new JwtResponse(accessToken);

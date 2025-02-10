@@ -24,16 +24,17 @@ public class UserService {
 
 
     @Bean
-    public UserDetailsService userDetailsService() {
+    public UserDetailsService userDetailsService() { // todo Бины обычно создаются в классе конфигурации, отлично подойдет SecurityConfig. А затем автоинжектятся
         return username -> userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
+    // todo Либо даже лучше будет реализовать интерфейс UserDetailsService и тут же определить метод loadUserByUsername
 
 
     @Transactional(readOnly = true)
     public Optional<UserEntity> getByUsername(@NonNull String username) {
         UserEntity user = userRepository.findByUsername(username).orElse(null);
-        return Optional.ofNullable(user);
+        return Optional.ofNullable(user); // todo Можно просто return userRepository.findByUsername(username); возвращается и так Optional
 
     }
 

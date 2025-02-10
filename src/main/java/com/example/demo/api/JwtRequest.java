@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class JwtRequest {
+public class JwtRequest { // todo Этот класс должен находиться в слое model
 
     private String username;
     private String password;

@@ -32,7 +32,7 @@ public class AuthorController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAuthor(@PathVariable Long id){
-        if (authorService.deleteAuthor(id)) {
+        if (authorService.deleteAuthor(id)) { // todo тут можно через NoSuchAuthorException, по аналогии с updateAuthor и getAuthor
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();

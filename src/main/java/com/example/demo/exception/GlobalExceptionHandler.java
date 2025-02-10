@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@RestControllerAdvice
+@RestControllerAdvice // todo Хорошо бы добавить логирование о том, что была поймана ошибка
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(NoSuchAuthorException.class)
