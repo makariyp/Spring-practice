@@ -3,7 +3,6 @@ package com.example.demo.service;
 import com.example.demo.exception.NoSuchBookException;
 import com.example.demo.model.Book;
 import com.example.demo.model.BookModel;
-import com.example.demo.repository.AuthorRepository;
 import com.example.demo.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,10 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class BookService {
+public class BookService implements BookServiceImpl {
 
     private final BookRepository bookRepository;
-    private final AuthorRepository authorRepository; // todo Не используется
 
     @Transactional
     public BookModel createBook(Book book) {
@@ -41,15 +39,9 @@ public class BookService {
     }
 
     @Transactional
-    public boolean deleteBook(Long id) {
-        Book book = bookRepository.findById(id).orElse(null);
-
-        if (book == null) {
-            return false;
-        }
-
+    public Void deleteBook(Long id) {
+        bookRepository.findById(id).orElseThrow(() -> new NoSuchBookException("Book not found"));
         bookRepository.deleteById(id);
-
-        return true;
+        return null;
     }
 }

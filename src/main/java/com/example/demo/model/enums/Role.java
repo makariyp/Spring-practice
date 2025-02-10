@@ -1,12 +1,12 @@
-package com.example.demo.api;
+package com.example.demo.model.enums;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
 @RequiredArgsConstructor
-public enum Role implements GrantedAuthority { // todo все enum тоже в папку model, можно сделать подпапку enums
+public enum Role implements GrantedAuthority {
 
-    ADMIN("ADMIN"),
+
     USER("USER");
 
     private final String value;

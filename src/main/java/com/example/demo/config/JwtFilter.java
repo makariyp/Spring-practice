@@ -1,7 +1,6 @@
 package com.example.demo.config;
 
 
-import com.example.demo.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -29,7 +27,7 @@ public class JwtFilter extends OncePerRequestFilter {
     private static final String AUTHORIZATION = "Authorization";
 
     private final JwtProvider jwtProvider;
-    private final UserService userService; // todo Можно сразу заинжектить UserDetailsService
+    private final UserDetailsService userDetailsService;
 
     @Override
     public void doFilterInternal( @NonNull HttpServletRequest request,
@@ -39,12 +37,11 @@ public class JwtFilter extends OncePerRequestFilter {
         final String token = getTokenFromRequest(request);
         if (token != null && jwtProvider.validateAccessToken(token)) {
             final var login = jwtProvider.getAccessClaims(token).getSubject();
-            UserDetails userDetails = userService // todo Тут сразу используем UserDetailsService
-                    .userDetailsService()
-                    .loadUserByUsername(login);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(login);
 
 
-            SecurityContext context = SecurityContextHolder.createEmptyContext(); // todo В эту переменную ты кладешь authToken, затем не используешь ее
+
+
 
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                     userDetails,
@@ -54,8 +51,8 @@ public class JwtFilter extends OncePerRequestFilter {
             authToken.setDetails(
                     new WebAuthenticationDetailsSource().buildDetails(request)
             );
-            context.setAuthentication(authToken);
-            SecurityContextHolder.getContext().setAuthentication(authToken); // todo А повторно кладешь authToken в существующий контекст, можно оставить только это
+
+            SecurityContextHolder.getContext().setAuthentication(authToken);
         }
         filterChain.doFilter(request, response);
     }

@@ -1,29 +1,30 @@
 package com.example.demo.controller;
 
 
-import com.example.demo.api.JwtRequest;
-import com.example.demo.api.JwtResponse;
-import com.example.demo.exception.UserAlreadyExistException;
+import com.example.demo.api.Endpoints;
+import com.example.demo.model.request.JwtRequest;
+import com.example.demo.model.response.JwtResponse;
 import com.example.demo.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("api/auth") // todo Можно вынести в Endpoints
+@RequestMapping(Endpoints.AUTH)
 @RequiredArgsConstructor
 public class AuthController {
 
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<JwtResponse> registration(@RequestBody JwtRequest authRequest ){
-        try {
-            final JwtResponse token = authService.register(authRequest);
-            return ResponseEntity.ok(token);
-        }catch (UserAlreadyExistException e){ // todo Почему бы по аналогии с другими искл. не добавить обработку в GlobalExceptionHandler
-            return ResponseEntity.status(409).build();
-        }
+    public ResponseEntity<JwtResponse> registration(@RequestBody JwtRequest authRequest) {
+
+        final JwtResponse token = authService.register(authRequest);
+        return ResponseEntity.ok(token);
+
     }
 
     @PostMapping("/login")
