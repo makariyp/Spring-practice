@@ -1,15 +1,44 @@
 package com.example.demo.service;
 
+import com.example.demo.exception.NoSuchAuthorException;
 import com.example.demo.model.Author;
 import com.example.demo.model.AuthorModel;
+import com.example.demo.repository.AuthorRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-public interface AuthorServiceImpl {
+@Service
+@RequiredArgsConstructor
+public class AuthorServiceImpl implements AuthorService {
+    private final AuthorRepository authorRepository;
 
-    AuthorModel createAuthor(Author author);
+    @Transactional
+    public AuthorModel createAuthor(Author author) {
+        return AuthorModel.from(authorRepository.save(author));
+    }
 
-    AuthorModel getAuthor(Long id);
 
-    AuthorModel updateAuthor(Long id, Author author);
+    @Transactional(readOnly = true)
+    public AuthorModel getAuthor(Long id) {
+        return AuthorModel.from(authorRepository.findById(id).orElseThrow(() -> new NoSuchAuthorException("Author not found")));
+    }
 
-    Void deleteAuthor(Long id);
+    @Transactional
+    public AuthorModel updateAuthor(Long id, Author author) {
+        Author oldAuthor = authorRepository.findById(id).orElseThrow(() -> new NoSuchAuthorException("Author not found"));
+
+        oldAuthor.setBiography(author.getBiography());
+        oldAuthor.setName(author.getName());
+        return AuthorModel.from(authorRepository.save(oldAuthor));
+    }
+
+    @Transactional
+    public Void deleteAuthor(Long id) {
+        authorRepository.findById(id).orElseThrow(() -> new NoSuchAuthorException("Author not found"));
+        authorRepository.deleteById(id);
+
+
+        return null;
+    }
 }
