@@ -3,7 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.api.Endpoints;
 import com.example.demo.model.Book;
 import com.example.demo.model.BookModel;
-import com.example.demo.service.BookServiceImpl;
+import com.example.demo.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping(Endpoints.BOOK)
 public class BookController {
-    private final BookServiceImpl bookService;
+    private final BookService bookService;
 
     @PostMapping
     public ResponseEntity<BookModel> createBook(@RequestBody Book book) {
