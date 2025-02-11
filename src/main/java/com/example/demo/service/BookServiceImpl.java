@@ -1,14 +1,47 @@
 package com.example.demo.service;
 
+import com.example.demo.exception.NoSuchBookException;
 import com.example.demo.model.Book;
 import com.example.demo.model.BookModel;
+import com.example.demo.repository.BookRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-public interface BookServiceImpl {
-    BookModel createBook(Book book);
+@Service
+@RequiredArgsConstructor
+public class BookServiceImpl implements BookService {
 
-    BookModel getBook(Long id);
+    private final BookRepository bookRepository;
 
-    BookModel updateBook(Long id, Book book);
+    @Transactional
+    public BookModel createBook(Book book) {
 
-    Void deleteBook(Long id);
+        return BookModel.from(bookRepository.save(book));
+
+    }
+
+    @Transactional
+    public BookModel getBook(Long id) {
+        return BookModel.from(bookRepository.findById(id).orElseThrow(() -> new NoSuchBookException("Book not found")));
+    }
+
+    @Transactional
+    public BookModel updateBook(Long id, Book book) {
+        Book oldBook = bookRepository.findById(id).orElseThrow(() -> new NoSuchBookException("Book not found"));
+
+
+        oldBook.setTitle(book.getTitle());
+        oldBook.setDescription(book.getDescription());
+        oldBook.setAuthors(book.getAuthors());
+
+        return BookModel.from(bookRepository.save(oldBook));
+    }
+
+    @Transactional
+    public Void deleteBook(Long id) {
+        bookRepository.findById(id).orElseThrow(() -> new NoSuchBookException("Book not found"));
+        bookRepository.deleteById(id);
+        return null;
+    }
 }

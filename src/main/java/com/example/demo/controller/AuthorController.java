@@ -3,7 +3,8 @@ package com.example.demo.controller;
 import com.example.demo.api.Endpoints;
 import com.example.demo.model.Author;
 import com.example.demo.model.AuthorModel;
-import com.example.demo.service.AuthorService;
+import com.example.demo.service.AuthorServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,10 +14,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(Endpoints.AUTHOR)
 public class AuthorController {
 
-    private final AuthorService authorService;
+    private final AuthorServiceImpl authorService;
 
     @PostMapping
-    public ResponseEntity<AuthorModel> createAuthor(@RequestBody Author author){
+    public ResponseEntity<AuthorModel> createAuthor(@RequestBody @Valid Author author){
         return ResponseEntity.ok(authorService.createAuthor(author));
     }
 
@@ -26,7 +27,7 @@ public class AuthorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AuthorModel> updateAuthor(@PathVariable Long id,@RequestBody Author author ){
+    public ResponseEntity<AuthorModel> updateAuthor(@PathVariable Long id,@RequestBody @Valid Author author ){
         return ResponseEntity.ok(authorService.updateAuthor(id, author));
     }
 
