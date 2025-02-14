@@ -28,7 +28,7 @@ public class JwtProvider {
     private final SecretKey jwtAccessSecret;
 
 
-    public JwtProvider(
+public JwtProvider(
             @Value("${jwt.secret.access}") String jwtAccessSecret
 
     ) {
