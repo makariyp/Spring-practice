@@ -42,7 +42,7 @@ class AuthControllerTest {
     private AuthService authService;
 
     @Test
-    @Order(1)
+    @Order(1) // Это плохая практика делать тест кейсы взаимосвязанными
     void testRegister() throws Exception {
         RegistrationRequest regRequest = new RegistrationRequest("user", "test@mail.ru", "password");
 
@@ -52,10 +52,11 @@ class AuthControllerTest {
                         .content(new ObjectMapper().writeValueAsString(regRequest)))
                 .andExpect(status().isOk());
 
+        // todo тут хорошо бы проверить, что пользователь создался в БД
     }
 
     @Test
-    @Order(2)
+    @Order(2) // todo лучше создать тестового пользователя sql скриптом
     void testLogin() throws Exception {
         JwtRequest authRequest = new JwtRequest("user", "password");
 
@@ -65,5 +66,8 @@ class AuthControllerTest {
                         .content(new ObjectMapper().writeValueAsString(authRequest)))
                 .andExpect(status().isOk());
 
+        // todo проверяем, что токен был получен
     }
+
+    // todo нет проверки UserAlreadyExistException
 }

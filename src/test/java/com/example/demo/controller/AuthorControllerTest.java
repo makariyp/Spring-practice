@@ -76,6 +76,8 @@ class AuthorControllerTest {
 
     }
 
+    // todo нет тест кейсов, проверяющих валидацию
+
     @Sql("/sql/create_author.sql")
     @Test
     @DisplayName(value = "Get Author")
@@ -119,6 +121,8 @@ class AuthorControllerTest {
         assertThat(createdAuthor.getBiography()).isEqualTo(newAuthor.getBiography());
 
     }
+
+    // todo нет тестов проверяющих обновление и удаление несуществующих авторов
 
     @Sql("/sql/create_author.sql")
     @Test
