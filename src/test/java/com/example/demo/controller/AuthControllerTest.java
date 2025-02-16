@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         refresh = AutoConfigureEmbeddedDatabase.RefreshMode.AFTER_CLASS,
         type = AutoConfigureEmbeddedDatabase.DatabaseType.POSTGRES)
 
-@ActiveProfiles("test")
+@ActiveProfiles("test-security")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class AuthControllerTest {
 
