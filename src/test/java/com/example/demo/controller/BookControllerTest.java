@@ -13,10 +13,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.util.Optional;
 
@@ -27,15 +27,12 @@ import static io.zonky.test.db.AutoConfigureEmbeddedDatabase.DatabaseProvider.ZO
         provider = ZONKY,
         refresh = AutoConfigureEmbeddedDatabase.RefreshMode.AFTER_EACH_TEST_METHOD,
         type = AutoConfigureEmbeddedDatabase.DatabaseType.POSTGRES)
-//@EnableAutoConfiguration(exclude = {
-//        SecurityAutoConfiguration.class,
-//        SecurityFilterAutoConfiguration.class
-//})
+
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 class BookControllerTest {
 
-    @MockitoBean
+    @Mock
     private BookRepository bookRepository;
 
     @InjectMocks

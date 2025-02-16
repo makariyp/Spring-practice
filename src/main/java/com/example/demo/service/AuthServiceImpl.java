@@ -1,13 +1,14 @@
 package com.example.demo.service;
 
 
-import com.example.demo.model.request.JwtRequest;
-import com.example.demo.model.response.JwtResponse;
-import com.example.demo.model.enums.Role;
 import com.example.demo.config.JwtProvider;
 import com.example.demo.exception.AuthException;
 import com.example.demo.exception.UserAlreadyExistException;
 import com.example.demo.model.UserEntity;
+import com.example.demo.model.enums.Role;
+import com.example.demo.model.request.JwtRequest;
+import com.example.demo.model.request.RegistrationRequest;
+import com.example.demo.model.response.JwtResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,18 +27,24 @@ public class AuthServiceImpl implements AuthService {
     private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
 
-    public JwtResponse register(@NonNull JwtRequest authRequest)  {
+    public JwtResponse register(@NonNull RegistrationRequest regRequest) {
+        String username = null;
+        try {
+            username = userService.loadUserByUsername(regRequest.getUsername()).getUsername();
+        } catch (UsernameNotFoundException ignored) {
 
-        if (userService.loadUserByUsername(authRequest.getUsername())!=null) {
+        }
+        if (username != null) {
             throw new UserAlreadyExistException("User already exist");
         }
 
-        String hashedPassword = passwordEncoder.encode(authRequest.getPassword());
+        String hashedPassword = passwordEncoder.encode(regRequest.getPassword());
 
 
         UserEntity newUser = new UserEntity();
-        newUser.setUsername(authRequest.getUsername());
+        newUser.setUsername(regRequest.getUsername());
         newUser.setPassword(hashedPassword);
+        newUser.setEmail(regRequest.getEmail());
 
 
         Set<Role> roles = new HashSet<>();
