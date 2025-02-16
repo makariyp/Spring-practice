@@ -3,6 +3,7 @@ package com.example.demo.controller;
 
 import com.example.demo.api.Endpoints;
 import com.example.demo.model.request.JwtRequest;
+import com.example.demo.model.request.RegistrationRequest;
 import com.example.demo.model.response.JwtResponse;
 import com.example.demo.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +21,9 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<JwtResponse> registration(@RequestBody JwtRequest authRequest) {
+    public ResponseEntity<JwtResponse> registration(@RequestBody RegistrationRequest regRequest) {
 
-        final JwtResponse token = authService.register(authRequest);
+        final JwtResponse token = authService.register(regRequest);
         return ResponseEntity.ok(token);
 
     }

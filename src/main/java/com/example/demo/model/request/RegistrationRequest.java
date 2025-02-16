@@ -7,10 +7,8 @@ import lombok.Setter;
 @Setter
 @Getter
 @AllArgsConstructor
-public class JwtRequest {
-
+public class RegistrationRequest {
     private String username;
+    private String email;
     private String password;
-
-
 }

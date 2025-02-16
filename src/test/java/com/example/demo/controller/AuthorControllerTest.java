@@ -2,11 +2,9 @@ package com.example.demo.controller;
 
 
 import com.example.demo.model.Author;
-import com.example.demo.model.Book;
 import com.example.demo.repository.AuthorRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +14,8 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAut
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
-
 
 import java.util.ArrayList;
 
@@ -57,7 +55,8 @@ class AuthorControllerTest {
         //given
         authorRepository.deleteAll();
         assertThat(authorRepository.count()).isZero();
-        Author author = new Author(1L, "Jonh Doe", "smth", new ArrayList<Book>());
+        String authorName = "John Doe";
+        Author author = new Author(null, authorName, "smth", new ArrayList<>());
 
 
         //when
@@ -66,7 +65,7 @@ class AuthorControllerTest {
                         .content(objectMapper.writeValueAsString(author)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.name").value("John Doe"))
+                .andExpect(jsonPath("$.name").value(authorName))
                 .andExpect(jsonPath("$.biography").value("smth"));
         //then
         assertThat(authorRepository.count()).isEqualTo(1);
@@ -77,43 +76,31 @@ class AuthorControllerTest {
 
     }
 
+    @Sql("/sql/create_author.sql")
     @Test
     @DisplayName(value = "Get Author")
     public void getAuthor_ShouldReturnAuthor() throws Exception {
         //given
 
 
-        authorRepository.deleteAll();
-        assertThat(authorRepository.count()).isZero();
-        Author author = new Author(1L, "Jonh Doe", "smth", new ArrayList<Book>());
-        authorRepository.save(author);
-
-
         //when
-        mockMvc.perform(get("/api/authors/1")
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(author)))
+        mockMvc.perform(get("/api/authors/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.name").value("John Doe"))
                 .andExpect(jsonPath("$.biography").value("smth"));
-        //then
 
 
     }
 
+    @Sql("/sql/create_author.sql")
     @Test
     @DisplayName(value = "Update Author")
     public void updateAuthor_ShouldReturnAuthor() throws Exception {
         //given
 
 
-        authorRepository.deleteAll();
-        assertThat(authorRepository.count()).isZero();
-        Author author = new Author(1L, "Jonh Doe", "smth", new ArrayList<Book>());
-        authorRepository.save(author);
-
-        Author newAuthor = new Author(null, "Denis", "new", new ArrayList<Book>());
+        Author newAuthor = new Author(null, "Denis", "new", new ArrayList<>());
 
 
         //when
@@ -133,18 +120,11 @@ class AuthorControllerTest {
 
     }
 
+    @Sql("/sql/create_author.sql")
     @Test
     @DisplayName(value = "delete Author")
     public void deleteAuthor_ShouldReturnOK() throws Exception {
         //given
-
-
-        authorRepository.deleteAll();
-        assertThat(authorRepository.count()).isZero();
-        Author author = new Author(1L, "Jonh Doe", "smth", new ArrayList<Book>());
-        authorRepository.save(author);
-
-
 
 
         //when

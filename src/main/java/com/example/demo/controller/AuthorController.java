@@ -22,12 +22,12 @@ public class AuthorController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AuthorModel> getAuthor(@PathVariable Long id) {
+    public ResponseEntity<AuthorModel> getAuthor(@PathVariable("id") Long id) {
         return ResponseEntity.ok(authorService.getAuthor(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AuthorModel> updateAuthor(@PathVariable Long id, @RequestBody @Valid Author author) {
+    public ResponseEntity<AuthorModel> updateAuthor(@PathVariable("id") Long id, @RequestBody @Valid Author author) {
         return ResponseEntity.ok(authorService.updateAuthor(id, author));
     }
 
